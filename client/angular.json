@@ -15,8 +15,8 @@
           "path": "src"
         },
         "@schematics/angular:service": {
-           "skipTests": true,
-           "path":"src/services"
+          "skipTests": true,
+          "path": "src/services"
         }
       },
       "root": "",
@@ -35,7 +35,8 @@
               }
             ],
             "styles": [
-               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/material-theme.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ]
           },

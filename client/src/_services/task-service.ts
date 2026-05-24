@@ -1,14 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AccountService } from './account-service';
+import { UserTask } from '../_models/user-task.model';
 
-export interface UserTask {
-  id: number;
-  title: string;
-  description: string;
-  isCompleted: boolean;
-  createdAt: Date;
-}
 
 @Injectable({
   providedIn: 'root'

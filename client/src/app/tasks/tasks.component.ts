@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TaskService, UserTask } from '../../services/task-service';
+import { TaskService } from '../../_services/task-service';
+import { UserTask } from '../../_models/user-task.model';
+import { ToastService } from '../../_services/toast-service';
 
 @Component({
   selector: 'app-tasks',
@@ -12,6 +14,7 @@ import { TaskService, UserTask } from '../../services/task-service';
 })
 export class TasksComponent implements OnInit {
   private taskService = inject(TaskService);
+  private toastr = inject(ToastService)
   
   tasks = signal<UserTask[]>([]);
   newTask: any = { title: '', description: '' };
@@ -35,8 +38,11 @@ export class TasksComponent implements OnInit {
       next: (task) => {
         this.tasks.update(tasks => [...tasks, task]);
         this.newTask = { title: '', description: '' };
+        this.toastr.success('Task Added successfully')
       },
-      error: (err) => console.error('Failed to create task', err)
+      error: () => {
+        this.toastr.error('Error Adding Task')
+      }
     });
   }
 
@@ -55,8 +61,9 @@ export class TasksComponent implements OnInit {
       next: () => {
         this.tasks.update(tasks => tasks.map(t => t.id === this.editingTask!.id ? { ...t, ...this.editForm } : t));
         this.editingTask = null;
+        this.toastr.success('Task Updated Successfully')
       },
-      error: (err) => console.error('Failed to update task', err)
+      error: () => this.toastr.error('Failed to update task')
     });
   }
 
@@ -66,7 +73,7 @@ export class TasksComponent implements OnInit {
       next: () => {
         this.tasks.update(tasks => tasks.map(t => t.id === task.id ? updatedTask : t));
       },
-      error: (err) => console.error('Failed to update task completion', err)
+      error: () => this.toastr.error('Failed to update task completion')
     });
   }
 
@@ -75,8 +82,9 @@ export class TasksComponent implements OnInit {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
         this.tasks.update(tasks => tasks.filter(t => t.id !== id));
+        this.toastr.success( 'Task Deleted Successfully')
       },
-      error: (err) => console.error('Failed to delete task', err)
+      error: () => this.toastr.error('Failed to delete task')
     });
   }
 }

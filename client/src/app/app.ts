@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Nav } from "./nav/nav";
 import { TasksComponent } from './tasks/tasks.component';
-import { AccountService } from '../services/account-service';
+import { AccountService } from '../_services/account-service';
 
 @Component({
   selector: 'app-root',

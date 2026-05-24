@@ -12,11 +12,20 @@ export class AccountService {
 
   currentUser = signal<any | null>(null);
 
+  constructor() {
+  const user = localStorage.getItem('user');
+
+  if (user) {
+    this.currentUser.set(JSON.parse(user));
+  }
+}
+
   login(creds: any) {
     return this.http.post(this.baseUrl + 'account/login', creds).pipe(
       map((user: any) => {
         if (user) {
           this.currentUser.set(user);
+          localStorage.setItem('user' ,JSON.stringify(user));
         }
         return user;
       })
@@ -29,5 +38,6 @@ export class AccountService {
 
   logout() {
     this.currentUser.set(null);
+    localStorage.removeItem('user');
   }
 }

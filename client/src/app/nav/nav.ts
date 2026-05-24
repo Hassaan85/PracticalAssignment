@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AccountService } from '../../services/account-service';
+import { AccountService } from '../../_services/account-service';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../_services/toast-service';
+import { MatSnackBar } from '@angular/material/snack-bar';;
 
 @Component({
   selector: 'app-nav',
-  imports: [FormsModule ,CommonModule],
+  imports: [FormsModule ,CommonModule ],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })
 export class Nav {
   accountService = inject(AccountService);
+  toastr = inject(ToastService)
 
   protected creds: any = {};
 
@@ -18,10 +21,11 @@ export class Nav {
     console.log(this.creds)
     this.accountService.login(this.creds).subscribe({
       next: result => {
+        this.toastr.success('Logged in successfully')
         console.log('Logged in successfully', result);
       },
       error: err => {
-        console.log(err);
+     this.toastr.error('Invalid userName or password')
       }
     });
   }
