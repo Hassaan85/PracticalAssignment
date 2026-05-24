@@ -1,0 +1,58 @@
+.tasks-container {
+    min-height: calc(100vh - 70px);
+    background-color: #f8f9fa;
+    padding-bottom: 3rem;
+}
+
+.premium-card {
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.premium-input {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.premium-input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.premium-btn {
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.task-card {
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+}
+
+.completed-task {
+    background-color: #f8f9fa;
+    opacity: 0.8;
+}
+
+.icon-btn {
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Animations */
+.transition-all {
+    transition: all 0.3s ease;
+}

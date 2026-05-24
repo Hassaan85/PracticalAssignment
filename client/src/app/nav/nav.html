@@ -1,0 +1,28 @@
+<header class="p-3 w-100 fixed-top bg-success text-white">
+    <div class="container d-flex align-items-center justify-content-between">
+
+       
+        <a class="text-white border-end pe-3 text-decoration-none fw-bold">
+           Task Manager
+        </a>
+
+    
+        <div class="flex align-middle ml-auto gap-3">
+            @if (accountService.currentUser()) {
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white fw-bold">Welcome, {{ accountService.currentUser().displayName }}</span>
+                <button class="btn btn-outline-light" type="button" (click)="logout()">
+                    Logout
+                </button>
+            </div>
+            } @else {
+            <form #loginForm="ngForm" (ngSubmit)="login()" class="d-flex align-items-center gap-3">
+                <input type="text" [(ngModel)]="creds.name" name="name" class="form-control" placeholder="UserName">
+                <input [(ngModel)]="creds.password" name="password" type="password" class="form-control" placeholder="Password">
+                <button type="submit" class="btn btn-light">Login</button>
+            </form>
+            }
+        </div>
+
+    </div>
+</header>

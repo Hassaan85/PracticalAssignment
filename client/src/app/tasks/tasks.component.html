@@ -1,0 +1,85 @@
+<div class="tasks-container container mt-5 pt-5">
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <h2 class="display-5 fw-bold text-success">My Tasks</h2>
+            <p class="text-muted">Manage your daily tasks efficiently.</p>
+        </div>
+    </div>
+
+    <div class="row">
+   
+        <div class="col-lg-4 mb-5">
+            <div class="card shadow-sm border-0 premium-card sticky-top" style="top: 100px; z-index: 10;">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold text-success mb-3">Add New Task</h5>
+                    <form (ngSubmit)="addTask()" class="d-flex flex-column gap-3">
+                        <input type="text" [(ngModel)]="newTask.title" name="title" class="form-control premium-input" placeholder="Task Title" required>
+                        <textarea [(ngModel)]="newTask.description" name="description" class="form-control premium-input" placeholder="Task Description" rows="4"></textarea>
+                        <div class="text-end mt-2">
+                            <button type="submit" class="btn btn-success  premium-btn py-2" [disabled]="!newTask.title">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-8">
+            <div class="row">
+                @for (task of tasks(); track task.id) {
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm border-0 h-100 task-card transition-all" [class.completed-task]="task.isCompleted">
+                            <div class="card-body d-flex flex-column">
+                                
+                                @if (editingTask?.id === task.id) {
+                                    <div class="edit-mode d-flex flex-column gap-2 h-100">
+                                        <input type="text" [(ngModel)]="editForm.title" class="form-control premium-input">
+                                        <textarea [(ngModel)]="editForm.description" class="form-control premium-input h-100" rows="3"></textarea>
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" [(ngModel)]="editForm.isCompleted" id="flexCheck{{task.id}}">
+                                            <label class="form-check-label text-muted" for="flexCheck{{task.id}}">Completed</label>
+                                        </div>
+                                        <div class="d-flex justify-content-end gap-2 mt-auto pt-3">
+                                            <button class="btn btn-sm btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+                                            <button class="btn btn-sm btn-success" (click)="updateTask()">Save</button>
+                                        </div>
+                                    </div>
+                                } @else {
+                                    <div class="view-mode d-flex flex-column h-100">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title fw-bold mb-0" [class.text-decoration-line-through]="task.isCompleted" [class.text-muted]="task.isCompleted">
+                                                {{ task.title }}
+                                            </h5>
+                                            <div class="form-check form-switch cursor-pointer">
+                                                <input class="form-check-input cursor-pointer" type="checkbox" [checked]="task.isCompleted" (change)="toggleComplete(task)" title="Toggle Completion">
+                                            </div>
+                                        </div>
+                                        <p class="card-text text-muted flex-grow-1" [class.text-decoration-line-through]="task.isCompleted">{{ task.description }}</p>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                            <small class="text-muted">{{ task.createdAt | date:'shortDate' }}</small>
+                                            <div class="action-buttons gap-2 d-flex">
+                                                <button class="btn btn-sm btn-outline-primary icon-btn" (click)="editTask(task)" title="Edit">
+                                                    <i class="bi bi-pencil"></i> Edit
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger icon-btn" (click)="deleteTask(task.id)" title="Delete">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (tasks().length === 0) {
+                    <div class="col-12 text-center py-5">
+                        <div class="text-muted fs-4">No tasks found. Start adding some!</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

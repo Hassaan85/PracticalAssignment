@@ -1,6 +1,14 @@
+<app-nav/>
 
-<router-outlet >
-
-
+<div class="container-fluid mt-5 pt-4">
+    @if (accountService.currentUser()) {
+        <app-tasks/>
+    } @else {
+        <div class="container mt-5 text-center">
+            <h1 class="display-4 fw-bold">Welcome to Task Management</h1>
+            <p class="lead text-muted">Please login to view and manage your tasks.</p>
+        </div>
+    }
+</div>
 
 <router-outlet />

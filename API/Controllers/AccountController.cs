@@ -17,7 +17,7 @@ namespace API.Controllers;
     public async Task<ActionResult<AppUser>>Register(RegisterDto registerDto)
 
     {
-        if (await EmailExists(registerDto.Email)) return BadRequest("Email Taken");
+        if (await NameExists(registerDto.DisplayName)) return BadRequest("Name Taken");
         var hmac = new HMACSHA512();
 
         var user = new AppUser
@@ -37,9 +37,9 @@ namespace API.Controllers;
     [HttpPost("login")]
     public async Task<ActionResult<AppUser>>Login(LoginDto loginDto)
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Email== loginDto.Email);
+        var user = await context.Users.SingleOrDefaultAsync(x => x.DisplayName== loginDto.Name);
 
-        if (user == null) return Unauthorized("Invalid Email Address");
+        if (user == null) return Unauthorized("Invalid UserName");
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
 
@@ -52,10 +52,10 @@ namespace API.Controllers;
         return user;
     }
 
-    private async Task<bool> EmailExists(string email)
+    private async Task<bool> NameExists(string DisplayName)
 
     {
-        return await context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower());
+        return await context.Users.AnyAsync(x => x.DisplayName.ToLower() == DisplayName.ToLower());
     }
 }
 
