@@ -28,7 +28,7 @@ export class TasksComponent implements OnInit {
   loadTasks() {
     this.taskService.getTasks().subscribe({
       next: (data) => this.tasks.set(data),
-      error: (err) => console.error('Failed to load tasks', err)
+      error: () => this.toastr.error('Failed to load tasks')
     });
   }
 
