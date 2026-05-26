@@ -19,7 +19,7 @@
                             class="form-control premium-input" placeholder="Task Description" rows="4"></textarea>
                         <div class="text-end mt-2">
                             <button type="submit" class="btn btn-success  premium-btn py-2"
-                                [disabled]="!newTask.title">Add Task</button>
+                                [disabled]="!newTask.title || !newTask.description">Add Task</button>
                         </div>
                     </form>
                 </div>

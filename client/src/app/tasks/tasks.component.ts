@@ -38,7 +38,7 @@ export class TasksComponent implements OnInit {
   }
 
   addTask() {
-    if (!this.newTask.title) return;
+    if (!this.newTask.title || !this.newTask.description) return;
     this.taskService.createTask(this.newTask).subscribe({
       next: (task) => {
         this.tasks.update(tasks => [...tasks, task]);

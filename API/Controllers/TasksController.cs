@@ -39,7 +39,7 @@ public class TasksController(AppDbContext context) : BaseApiController
     public async Task<ActionResult<UserTaskDto>> CreateTask(CreateTaskDto taskDto)
     {
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = await context.Users.FindAsync(currentUserId);
+  
         if (user == null) return NotFound("User not found");
 
         var task = new UserTask
