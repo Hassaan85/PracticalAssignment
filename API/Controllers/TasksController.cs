@@ -6,16 +6,22 @@ using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
+
 
 namespace API.Controllers;
 
+[Authorize]
 public class TasksController(AppDbContext context) : BaseApiController
 {
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<IEnumerable<UserTaskDto>>> GetUserTasks(string userId)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UserTaskDto>>> GetUserTasks()
     {
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var tasks = await context.Tasks
-            .Where(t => t.AppUserId == userId)
+            .Where(t => t.AppUserId == currentUserId)
             .Select(t => new UserTaskDto
             {
                 Id = t.Id,
@@ -29,17 +35,18 @@ public class TasksController(AppDbContext context) : BaseApiController
         return Ok(tasks);
     }
 
-    [HttpPost("{userId}")]
-    public async Task<ActionResult<UserTaskDto>> CreateTask(string userId, CreateTaskDto taskDto)
+    [HttpPost]
+    public async Task<ActionResult<UserTaskDto>> CreateTask(CreateTaskDto taskDto)
     {
-        var user = await context.Users.FindAsync(userId);
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await context.Users.FindAsync(currentUserId);
         if (user == null) return NotFound("User not found");
 
         var task = new UserTask
         {
             Title = taskDto.Title,
             Description = taskDto.Description,
-            AppUserId = userId
+            AppUserId = currentUserId
         };
 
         context.Tasks.Add(task);
@@ -58,7 +65,16 @@ public class TasksController(AppDbContext context) : BaseApiController
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateTask(int id, UpdateTaskDto taskDto)
     {
-        var task = await context.Tasks.FindAsync(id);
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (currentUserId == null)
+            return Unauthorized();
+
+        var task = await context.Tasks
+        .FirstOrDefaultAsync(t =>
+            t.Id == id &&
+            t.AppUserId == currentUserId);
+
         if (task == null) return NotFound("Task not found");
 
         task.Title = taskDto.Title;
@@ -79,5 +95,11 @@ public class TasksController(AppDbContext context) : BaseApiController
         await context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    [HttpGet("error")]
+    public IActionResult GetError()
+    {
+        throw new Exception("Test exception middleware");
     }
 }

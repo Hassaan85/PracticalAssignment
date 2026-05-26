@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../_services/task-service';
@@ -15,11 +15,12 @@ import { ToastService } from '../../_services/toast-service';
 export class TasksComponent implements OnInit {
   private taskService = inject(TaskService);
   private toastr = inject(ToastService)
-  
+
   tasks = signal<UserTask[]>([]);
   newTask: any = { title: '', description: '' };
   editingTask: UserTask | null = null;
   editForm: any = { title: '', description: '', isCompleted: false };
+  filter = signal<'all' | 'completed' | 'pending'>('all');
 
   ngOnInit(): void {
     this.loadTasks();
@@ -30,6 +31,10 @@ export class TasksComponent implements OnInit {
       next: (data) => this.tasks.set(data),
       error: () => this.toastr.error('Failed to load tasks')
     });
+  }
+
+  debug() {
+    console.log('filter changed:', this.filter);
   }
 
   addTask() {
@@ -45,6 +50,22 @@ export class TasksComponent implements OnInit {
       }
     });
   }
+
+  filteredTasks = computed(() => {
+    const tasks = this.tasks();
+     const filter = this.filter();
+
+    console.log(1)
+    if (filter === 'completed') {
+      return tasks.filter(t => t.isCompleted);
+    }
+
+    if (filter === 'pending') {
+      return tasks.filter(t => !t.isCompleted);
+    }
+
+    return tasks; 
+  });
 
   editTask(task: UserTask) {
     this.editingTask = task;
@@ -72,6 +93,7 @@ export class TasksComponent implements OnInit {
     this.taskService.updateTask(task.id, updatedTask).subscribe({
       next: () => {
         this.tasks.update(tasks => tasks.map(t => t.id === task.id ? updatedTask : t));
+        this.toastr.success('Task Completed succefully')
       },
       error: () => this.toastr.error('Failed to update task completion')
     });
@@ -82,7 +104,7 @@ export class TasksComponent implements OnInit {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
         this.tasks.update(tasks => tasks.filter(t => t.id !== id));
-        this.toastr.success( 'Task Deleted Successfully')
+        this.toastr.success('Task Deleted Successfully')
       },
       error: () => this.toastr.error('Failed to delete task')
     });

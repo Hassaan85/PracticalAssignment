@@ -18,7 +18,7 @@ export class Nav {
   protected creds: any = {};
 
   login() {
-    console.log(this.creds)
+   /// console.log(this.creds)
     this.accountService.login(this.creds).subscribe({
       next: result => {
         this.toastr.success('Logged in successfully')

@@ -25,6 +25,10 @@ export class AccountService {
       map((user: any) => {
         if (user) {
           this.currentUser.set(user);
+           localStorage.setItem('creds', JSON.stringify({
+          username: creds.name,
+          password: creds.password
+        }));
           localStorage.setItem('user' ,JSON.stringify(user));
         }
         return user;
