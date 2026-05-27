@@ -39,8 +39,8 @@ public class TasksController(AppDbContext context) : BaseApiController
     public async Task<ActionResult<UserTaskDto>> CreateTask(CreateTaskDto taskDto)
     {
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-  
-        if (user == null) return NotFound("User not found");
+
+        if (currentUserId == null) return Unauthorized("Unauthorized");
 
         var task = new UserTask
         {
@@ -87,8 +87,14 @@ public class TasksController(AppDbContext context) : BaseApiController
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTask(int id)
+
     {
-        var task = await context.Tasks.FindAsync(id);
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var task = await context.Tasks.FirstOrDefaultAsync(t =>
+            t.Id == id &&
+            t.AppUserId == currentUserId);
+            
         if (task == null) return NotFound("Task not found");
 
         context.Tasks.Remove(task);
@@ -97,9 +103,9 @@ public class TasksController(AppDbContext context) : BaseApiController
         return NoContent();
     }
 
-    [HttpGet("error")]
-    public IActionResult GetError()
-    {
-        throw new Exception("Test exception middleware");
-    }
+    // [HttpGet("error")]
+    // public IActionResult GetError()
+    // {
+    //     throw new Exception("Test exception middleware");
+    // }
 }

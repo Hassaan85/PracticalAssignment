@@ -33,9 +33,9 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  debug() {
-    console.log('filter changed:', this.filter);
-  }
+  // debug() {
+  //   console.log('filter changed:', this.filter);
+  // }
 
   addTask() {
     if (!this.newTask.title || !this.newTask.description) return;
@@ -53,7 +53,7 @@ export class TasksComponent implements OnInit {
 
   filteredTasks = computed(() => {
     const tasks = this.tasks();
-     const filter = this.filter();
+    const filter = this.filter();
 
     console.log(1)
     if (filter === 'completed') {
@@ -64,7 +64,7 @@ export class TasksComponent implements OnInit {
       return tasks.filter(t => !t.isCompleted);
     }
 
-    return tasks; 
+    return tasks;
   });
 
   editTask(task: UserTask) {
@@ -88,12 +88,16 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  toggleComplete(task: UserTask) {
+  taskComplete(task: UserTask) {
     const updatedTask = { ...task, isCompleted: !task.isCompleted };
     this.taskService.updateTask(task.id, updatedTask).subscribe({
       next: () => {
         this.tasks.update(tasks => tasks.map(t => t.id === task.id ? updatedTask : t));
-        this.toastr.success('Task Completed succefully')
+        if (updatedTask.isCompleted) {
+          this.toastr.success('Task completed successfully');
+        } else {
+          this.toastr.info('Task completion removed');
+        }
       },
       error: () => this.toastr.error('Failed to update task completion')
     });

@@ -23,9 +23,6 @@ export class Nav {
       next: result => {
         this.toastr.success('Logged in successfully')
         console.log('Logged in successfully', result);
-      },
-      error: err => {
-     this.toastr.error('Invalid userName or password')
       }
     });
   }

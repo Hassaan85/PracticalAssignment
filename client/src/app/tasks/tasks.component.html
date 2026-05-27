@@ -31,7 +31,7 @@
         <div class="col-lg-8">
             <div class="row">
                 <div class="mb-3">
-                    <select class="form-select w-auto" [(ngModel)]="filter" (ngModelChange)="debug()">
+                    <select class="form-select w-auto" [(ngModel)]="filter">
                         <option value="all">All Tasks</option>
                         <option value="completed">Completed</option>
                         <option value="pending">Pending</option>
@@ -70,7 +70,7 @@
                                     </h5>
                                     <div class="form-check form-switch cursor-pointer">
                                         <input class="form-check-input cursor-pointer" type="checkbox"
-                                            [checked]="task.isCompleted" (change)="toggleComplete(task)"
+                                            [checked]="task.isCompleted" (change)="taskComplete(task)"
                                             title="Toggle Completion">
                                     </div>
                                 </div>

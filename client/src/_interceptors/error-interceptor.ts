@@ -11,20 +11,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError(error => {
       if (error) {
         switch (error.status) {
-          case 400 : 
-          toast.error(error.error);
-          break
-          case 401 :
-          toast.error('unauthorized');
-          break;
+          case 400:
+           toast.error(error.error);
+            break
+          case 401:
+            toast.error(error.error);
+            break;
           case 404:
             toast.error('Not Found');
-          break
+            break
           case 500:
             toast.error('Server error')
-          break
+            break
           default:
-          toast.error('Something went wrong ')
+            toast.error('Something went wrong ')
         }
       }
       throw error;
