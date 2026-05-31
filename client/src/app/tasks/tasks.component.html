@@ -9,14 +9,14 @@
     <div class="row">
 
         <div class="col-lg-4 mb-5">
-            <div class="card shadow-sm border-0 premium-card sticky-top" style="top: 100px; z-index: 10;">
+            <div class="card shadow-sm border-0 task-card sticky-top" style="top: 100px; z-index: 10;">
                 <div class="card-body p-4">
                     <h5 class="card-title fw-bold text-success mb-3">Add New Task</h5>
                     <form (ngSubmit)="addTask()" class="d-flex flex-column gap-3">
-                        <input type="text" [(ngModel)]="newTask.title" name="title" class="form-control premium-input"
+                        <input type="text" [(ngModel)]="newTask.title" name="title" class="form-control task-input"
                             placeholder="Task Title" required>
                         <textarea [(ngModel)]="newTask.description" name="description"
-                            class="form-control premium-input" placeholder="Task Description" rows="4"></textarea>
+                            class="form-control task-input" placeholder="Task Description" rows="4"></textarea>
                         <div class="text-end mt-2">
                             <button type="submit" class="btn btn-success  premium-btn py-2"
                                 [disabled]="!newTask.title || !newTask.description">Add Task</button>
@@ -45,8 +45,8 @@
 
                             @if (editingTask?.id === task.id) {
                             <div class="edit-mode d-flex flex-column gap-2 h-100">
-                                <input type="text" [(ngModel)]="editForm.title" class="form-control premium-input">
-                                <textarea [(ngModel)]="editForm.description" class="form-control premium-input h-100"
+                                <input type="text" [(ngModel)]="editForm.title" class="form-control task-input">
+                                <textarea [(ngModel)]="editForm.description" class="form-control task-input h-100"
                                     rows="3"></textarea>
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" [(ngModel)]="editForm.isCompleted"
